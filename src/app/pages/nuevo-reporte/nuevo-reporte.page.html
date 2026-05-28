@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nuevo Reporte</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="reporte-content">
+  <input type="file" id="fileInput" accept="image/*" style="display:none" (change)="onFileSelected($event)"/>
+  <div class="reporte-container">
+
+    <h4 class="section-label">Categoría</h4>
+    <div class="categorias">
+      <div class="categoria-chip"
+        *ngFor="let cat of categorias"
+        [class.selected]="categoriaSeleccionada === cat.valor"
+        (click)="seleccionarCategoria(cat.valor)">
+        <ion-icon [name]="cat.icono"></ion-icon>
+        <span>{{ cat.label }}</span>
+      </div>
+    </div>
+
+    <h4 class="section-label">Descripción</h4>
+    <div class="textarea-wrapper">
+      <textarea
+        [(ngModel)]="descripcion"
+        placeholder="Describe el problema con el mayor detalle posible..."
+        maxlength="500"
+        rows="4">
+      </textarea>
+      <span class="char-count">{{ descripcion.length }}/500</span>
+    </div>
+
+    <h4 class="section-label">Fotografía</h4>
+    <div class="foto-area" (click)="tomarFoto()">
+      <img *ngIf="fotoUrl" [src]="fotoUrl" class="foto-preview"/>
+      <div *ngIf="!fotoUrl" class="foto-placeholder">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Toca para capturar o adjuntar</span>
+      </div>
+    </div>
+
+    <h4 class="section-label">Ubicación</h4>
+    <div class="ubicacion-card">
+      <ion-icon name="location-outline"></ion-icon>
+      <div class="coords" *ngIf="latitud">
+        <span>GPS: {{ latitud | number:'1.4-4' }}°N, {{ longitud | number:'1.4-4' }}°W</span>
+        <small>Ubicación capturada</small>
+      </div>
+      <div class="coords" *ngIf="!latitud">
+        <span>Capturando ubicación...</span>
+        <small>Asegúrate de tener el GPS activo</small>
+      </div>
+    </div>
+
+    <ion-button expand="block" class="btn-enviar" (click)="enviarReporte()">
+      <ion-icon name="send-outline" slot="start"></ion-icon>
+      Enviar reporte
+    </ion-button>
+
+  </div>
+</ion-content>
