@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mis Reportes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goTo('/nuevo-reporte')">
+        <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="reportes-content">
+
+  <div class="filtros">
+    <div class="filtro-chip"
+      *ngFor="let f of filtros"
+      [class.active]="filtroActivo === f.valor"
+      (click)="filtrar(f.valor)">
+      {{ f.label }}
+    </div>
+  </div>
+
+  <div class="lista" *ngIf="reportesFiltrados.length > 0">
+    <div class="reporte-card" *ngFor="let r of reportesFiltrados" (click)="verDetalle(r)">
+      <div class="card-left">
+        <div class="categoria-icon" [ngClass]="r.categoria">
+          <ion-icon [name]="getIcono(r.categoria)"></ion-icon>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="categoria-label">{{ r.categoria | titlecase }}</span>
+          <span class="estado-chip" [ngClass]="r.estado">{{ getEstadoLabel(r.estado) }}</span>
+        </div>
+        <p class="descripcion">{{ r.descripcion }}</p>
+        <span class="fecha">{{ r.creadoEn?.toDate() | date:'d MMM yyyy, h:mm a' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="reportesFiltrados.length === 0 && !cargando">
+    <ion-icon name="document-outline"></ion-icon>
+    <p>No tienes reportes {{ filtroActivo !== 'todos' ? 'con este estado' : 'aún' }}.<br>
+      <span *ngIf="filtroActivo === 'todos'">¡Crea tu primer reporte!</span>
+    </p>
+    <ion-button *ngIf="filtroActivo === 'todos'" (click)="goTo('/nuevo-reporte')" fill="outline" color="primary">
+      Nuevo Reporte
+    </ion-button>
+  </div>
+
+  <div class="empty-state" *ngIf="cargando">
+    <ion-icon name="reload-outline" class="spin"></ion-icon>
+    <p>Cargando reportes...</p>
+  </div>
+
+</ion-content>

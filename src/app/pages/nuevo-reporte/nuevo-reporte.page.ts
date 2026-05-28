@@ -6,7 +6,7 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import {
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonIcon, ToastController, LoadingController
+  IonContent, IonIcon, IonTextarea, ToastController, LoadingController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -21,7 +21,7 @@ import {
   standalone: true,
   imports: [
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-    IonContent, IonIcon, FormsModule, CommonModule
+    IonContent, IonIcon, IonTextarea, FormsModule, CommonModule
   ],
 })
 export class NuevoReportePage implements OnInit {
@@ -71,20 +71,20 @@ export class NuevoReportePage implements OnInit {
   }
 
   tomarFoto() {
-  const input = document.getElementById('fileInput') as HTMLInputElement;
-  input.click();
-}
-
-onFileSelected(event: any) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.fotoUrl = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    input.click();
   }
-}
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotoUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   async enviarReporte() {
     if (!this.categoriaSeleccionada) {
