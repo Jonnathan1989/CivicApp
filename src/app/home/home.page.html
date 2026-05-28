@@ -1,0 +1,61 @@
+<ion-content class="home-content">
+  <div class="home-container">
+
+    <div class="top-bar">
+      <div class="user-info">
+        <div class="avatar">{{ inicial }}</div>
+        <div>
+          <p class="saludo">Buenos días,</p>
+          <h2 class="nombre">{{ nombreUsuario }}</h2>
+        </div>
+      </div>
+      <ion-button fill="clear" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="banner">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <div>
+        <h3>Tu municipio te necesita</h3>
+        <p>Reporta un problema</p>
+      </div>
+    </div>
+
+    <h4 class="section-title">Acciones rápidas</h4>
+
+    <div class="actions-grid">
+      <div class="action-card" (click)="goTo('/nuevo-reporte')">
+        <div class="action-icon blue">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </div>
+        <span>Nuevo Reporte</span>
+      </div>
+      <div class="action-card" (click)="goTo('/mis-reportes')">
+        <div class="action-icon teal">
+          <ion-icon name="list-outline"></ion-icon>
+        </div>
+        <span>Mis Reportes</span>
+      </div>
+      <div class="action-card" (click)="goTo('/mapa')">
+        <div class="action-icon green">
+          <ion-icon name="map-outline"></ion-icon>
+        </div>
+        <span>Mapa</span>
+      </div>
+      <div class="action-card" (click)="goTo('/perfil')">
+        <div class="action-icon orange">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <span>Perfil</span>
+      </div>
+    </div>
+
+    <h4 class="section-title">Actividad reciente</h4>
+    <div class="empty-state">
+      <ion-icon name="document-outline"></ion-icon>
+      <p>Aún no tienes reportes.<br>¡Crea tu primer reporte!</p>
+    </div>
+
+  </div>
+</ion-content>

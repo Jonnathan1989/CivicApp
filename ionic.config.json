@@ -1,0 +1,7 @@
+{
+  "name": "CivicApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

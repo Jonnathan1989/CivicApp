@@ -1,0 +1,65 @@
+.splash-content {
+  --background: linear-gradient(160deg, #1565C0 0%, #0D47A1 50%, #01579B 100%);
+}
+
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+}
+
+.logo-circle {
+  width: 110px;
+  height: 110px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255,255,255,0.4);
+  margin-bottom: 28px;
+
+  ion-icon {
+    font-size: 56px;
+    color: #ffffff;
+  }
+}
+
+.app-name {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+}
+
+.app-slogan {
+  font-size: 16px;
+  color: rgba(255,255,255,0.75);
+  margin: 0 0 60px 0;
+  text-align: center;
+}
+
+.loader {
+  width: 160px;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  overflow: hidden;
+
+  .loader-bar {
+    height: 100%;
+    width: 40%;
+    background: #ffffff;
+    border-radius: 2px;
+    animation: slide 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
