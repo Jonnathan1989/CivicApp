@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, collection, query, where, orderBy, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, orderBy, getDocs, doc, deleteDoc } from '@angular/fire/firestore';
 import {
   IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonIcon
+  IonContent, IonIcon, IonList, IonItem, IonLabel,
+  IonItemSliding, IonItemOptions, IonItemOption, AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline, addOutline, documentOutline, reloadOutline,
-  constructOutline, flashlightOutline, trashOutline, leafOutline, alertCircleOutline
+  constructOutline, flashlightOutline, trashOutline, leafOutline,
+  alertCircleOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -20,7 +22,9 @@ import {
   standalone: true,
   imports: [
     IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-    IonContent, IonIcon, CommonModule, DatePipe, TitleCasePipe
+    IonContent, IonIcon, IonList, IonItem, IonLabel,
+    IonItemSliding, IonItemOptions, IonItemOption,
+    CommonModule, DatePipe, TitleCasePipe
   ],
 })
 export class MisReportesPage implements OnInit {
@@ -40,9 +44,14 @@ export class MisReportesPage implements OnInit {
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {
-    addIcons({ arrowBackOutline, addOutline, documentOutline, reloadOutline, constructOutline, flashlightOutline, trashOutline, leafOutline, alertCircleOutline });
+    addIcons({
+      arrowBackOutline, addOutline, documentOutline, reloadOutline,
+      constructOutline, flashlightOutline, trashOutline, leafOutline,
+      alertCircleOutline
+    });
   }
 
   async ngOnInit() {
@@ -67,7 +76,6 @@ export class MisReportesPage implements OnInit {
       this.cargando = false;
       return;
     }
-    console.log('UID del usuario:', user.uid);
     try {
       const q = query(
         collection(this.firestore, 'reportes'),
@@ -75,7 +83,6 @@ export class MisReportesPage implements OnInit {
         orderBy('creadoEn', 'desc')
       );
       const snap = await getDocs(q);
-      console.log('Reportes encontrados:', snap.size);
       this.reportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       this.filtrar(this.filtroActivo);
     } catch (error) {
@@ -92,6 +99,34 @@ export class MisReportesPage implements OnInit {
     } else {
       this.reportesFiltrados = this.reportes.filter(r => r.estado === valor);
     }
+  }
+
+  async eliminarReporte(reporte: any) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar reporte',
+      message: '¿Estás seguro de que deseas eliminar este reporte?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          cssClass: 'danger',
+          handler: async () => {
+            try {
+              await deleteDoc(doc(this.firestore, 'reportes', reporte.id));
+              this.reportes = this.reportes.filter(r => r.id !== reporte.id);
+              this.filtrar(this.filtroActivo);
+            } catch (error) {
+              console.error('Error eliminando reporte:', error);
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   getIcono(categoria: string): string {
@@ -114,12 +149,11 @@ export class MisReportesPage implements OnInit {
     return map[estado] || estado;
   }
 
-  
   verDetalle(reporte: any) {
-  this.router.navigateByUrl('/detalle-reporte', {
-    state: { reporte }
-  });
-}
+    this.router.navigateByUrl('/detalle-reporte', {
+      state: { reporte }
+    });
+  }
 
   goTo(path: string) {
     this.router.navigateByUrl(path);

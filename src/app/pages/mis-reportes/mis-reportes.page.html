@@ -25,23 +25,32 @@
     </div>
   </div>
 
-  <div class="lista" *ngIf="reportesFiltrados.length > 0">
-    <div class="reporte-card" *ngFor="let r of reportesFiltrados" (click)="verDetalle(r)">
-      <div class="card-left">
-        <div class="categoria-icon" [ngClass]="r.categoria">
+  <ion-list lines="none" *ngIf="reportesFiltrados.length > 0">
+    <ion-item-sliding #sliding *ngFor="let r of reportesFiltrados">
+
+      <ion-item [button]="true" detail="false" (click)="verDetalle(r); sliding.close()">
+        <ion-avatar slot="start" class="categoria-icon" [ngClass]="r.categoria">
           <ion-icon [name]="getIcono(r.categoria)"></ion-icon>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="categoria-label">{{ r.categoria | titlecase }}</span>
-          <span class="estado-chip" [ngClass]="r.estado">{{ getEstadoLabel(r.estado) }}</span>
-        </div>
-        <p class="descripcion">{{ r.descripcion }}</p>
-        <span class="fecha">{{ r.creadoEn?.toDate() | date:'d MMM yyyy, h:mm a' }}</span>
-      </div>
-    </div>
-  </div>
+        </ion-avatar>
+        <ion-label>
+          <div class="card-top">
+            <span class="categoria-label">{{ r.categoria | titlecase }}</span>
+            <span class="estado-chip" [ngClass]="r.estado">{{ getEstadoLabel(r.estado) }}</span>
+          </div>
+          <p class="descripcion">{{ r.descripcion }}</p>
+          <p class="fecha">{{ r.creadoEn?.toDate() | date:'d MMM yyyy, h:mm a' }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" expandable (click)="eliminarReporte(r)">
+          <ion-icon slot="top" name="trash-outline"></ion-icon>
+          Eliminar
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+  </ion-list>
 
   <div class="empty-state" *ngIf="reportesFiltrados.length === 0 && !cargando">
     <ion-icon name="document-outline"></ion-icon>

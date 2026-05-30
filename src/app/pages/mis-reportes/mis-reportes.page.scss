@@ -36,47 +36,57 @@
   }
 }
 
-.lista {
+ion-list {
+  background: transparent;
   padding: 8px 16px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
-.reporte-card {
-  background: #ffffff;
+ion-item-sliding {
+  margin-bottom: 12px;
   border-radius: 14px;
+  overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-  display: flex;
-  gap: 12px;
-  padding: 14px;
-  cursor: pointer;
-  transition: transform 0.15s;
-
-  &:active { transform: scale(0.98); }
 }
 
-.categoria-icon {
+ion-item {
+  --background: #ffffff;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  --min-height: 72px;
+  --border-radius: 0;
+}
+
+ion-item-options {
+  background: transparent;
+  padding: 0;
+}
+
+ion-item-option {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 80px;
+}
+
+ion-avatar.categoria-icon {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
+  border-radius: 12px !important;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-right: 12px;
 
-  ion-icon { font-size: 22px; color: white; }
+  ion-icon {
+    font-size: 22px;
+    color: white;
+  }
 
   &.baches     { background: linear-gradient(135deg, #E65100, #F57C00); }
   &.luminarias { background: linear-gradient(135deg, #F9A825, #FBC02D); }
   &.basuras    { background: linear-gradient(135deg, #2E7D32, #43A047); }
   &.parques    { background: linear-gradient(135deg, #00838F, #00ACC1); }
   &.otros      { background: linear-gradient(135deg, #6A1B9A, #8E24AA); }
-}
-
-.card-body {
-  flex: 1;
-  overflow: hidden;
 }
 
 .card-top {
@@ -106,7 +116,7 @@
 .descripcion {
   font-size: 13px;
   color: #546E7A;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -115,6 +125,7 @@
 .fecha {
   font-size: 11px;
   color: #90A4AE;
+  margin: 0;
 }
 
 .empty-state {

@@ -13,6 +13,7 @@ import {
   arrowBackOutline, cameraOutline, locationOutline, sendOutline,
   constructOutline, flashlightOutline, trashOutline, leafOutline, alertCircleOutline
 } from 'ionicons/icons';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-nuevo-reporte',
@@ -54,15 +55,24 @@ export class NuevoReportePage implements OnInit {
     this.obtenerUbicacion();
   }
 
-  obtenerUbicacion() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          this.latitud = pos.coords.latitude;
-          this.longitud = pos.coords.longitude;
-        },
-        () => this.showToast('No se pudo obtener la ubicación')
-      );
+  async obtenerUbicacion() {
+    try {
+      // Pedir permiso explícitamente
+      const permiso = await Geolocation.requestPermissions();
+
+      if (permiso.location === 'granted') {
+        const posicion = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 10000
+        });
+        this.latitud = posicion.coords.latitude;
+        this.longitud = posicion.coords.longitude;
+      } else {
+        this.showToast('Permiso de ubicación denegado. Activa el GPS.');
+      }
+    } catch (error) {
+      console.error('Error GPS:', error);
+      this.showToast('No se pudo obtener la ubicación. Asegúrate de tener el GPS activo.');
     }
   }
 
@@ -93,6 +103,11 @@ export class NuevoReportePage implements OnInit {
     }
     if (!this.descripcion.trim()) {
       this.showToast('Escribe una descripción del problema');
+      return;
+    }
+    if (!this.latitud || !this.longitud) {
+      this.showToast('Esperando ubicación GPS...');
+      await this.obtenerUbicacion();
       return;
     }
     const loading = await this.loadingCtrl.create({ message: 'Enviando reporte...' });
