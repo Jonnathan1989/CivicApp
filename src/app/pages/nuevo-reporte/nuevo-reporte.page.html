@@ -37,8 +37,8 @@
 
     <h4 class="section-label">Fotografía</h4>
     <div class="foto-area" (click)="tomarFoto()">
-      <img *ngIf="fotoUrl" [src]="fotoUrl" class="foto-preview"/>
-      <div *ngIf="!fotoUrl" class="foto-placeholder">
+      <img *ngIf="fotoPreview" [src]="fotoPreview" class="foto-preview"/>
+      <div *ngIf="!fotoPreview" class="foto-placeholder">
         <ion-icon name="camera-outline"></ion-icon>
         <span>Toca para capturar o adjuntar</span>
       </div>

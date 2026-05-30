@@ -30,4 +30,16 @@ export const routes: Routes = [
     path: 'mis-reportes',
     loadComponent: () => import('./pages/mis-reportes/mis-reportes.page').then( m => m.MisReportesPage)
   },
+  {
+    path: 'mapa',
+    loadComponent: () => import('./pages/mapa/mapa.page').then( m => m.MapaPage)
+  },
+  {
+    path: 'detalle-reporte',
+    loadComponent: () => import('./pages/detalle-reporte/detalle-reporte.page').then( m => m.DetalleReportePage)
+  },
+  {
+    path: 'perfil',
+    loadComponent: () => import('./pages/perfil/perfil.page').then( m => m.PerfilPage)
+  },
 ];

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Detalle del Reporte</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div *ngIf="cargando" class="loading">
+    <p>Cargando...</p>
+  </div>
+
+  <div *ngIf="!cargando && !reporte" class="empty">
+    <p>No se encontró el reporte.</p>
+  </div>
+
+  <div *ngIf="!cargando && reporte" class="detalle-container">
+
+    <div class="icono-categoria">
+      <ion-icon [name]="getIcono(reporte.categoria)"></ion-icon>
+    </div>
+
+    <h2 class="categoria">{{ reporte.categoria | titlecase }}</h2>
+
+    <ion-badge [color]="getEstadoColor(reporte.estado)">
+      {{ getEstadoLabel(reporte.estado) }}
+    </ion-badge>
+
+    <div class="foto-container">
+      <img *ngIf="reporte.fotoUrl" [src]="reporte.fotoUrl" alt="Foto del reporte" />
+      <div *ngIf="!reporte.fotoUrl" class="foto-placeholder">
+        <ion-icon name="camera-outline"></ion-icon>
+        <p>Sin foto adjunta</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h4>Descripción</h4>
+      <p>{{ reporte.descripcion }}</p>
+    </div>
+
+    <div class="info-card">
+      <h4><ion-icon name="calendar-outline"></ion-icon> Fecha</h4>
+      <p>{{ reporte.creadoEn?.toDate() | date:'dd MMM yyyy, h:mm a' }}</p>
+    </div>
+
+    <div class="info-card">
+      <h4><ion-icon name="location-outline"></ion-icon> Ubicación</h4>
+      <p>Lat: {{ reporte.latitud | number:'1.4-4' }}</p>
+      <p>Lng: {{ reporte.longitud | number:'1.4-4' }}</p>
+    </div>
+
+  </div>
+
+</ion-content>

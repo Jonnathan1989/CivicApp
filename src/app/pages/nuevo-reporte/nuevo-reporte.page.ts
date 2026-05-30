@@ -36,7 +36,7 @@ export class NuevoReportePage implements OnInit {
 
   categoriaSeleccionada = '';
   descripcion = '';
-  fotoUrl: string | null = null;
+  fotoPreview: string | null = null;
   latitud: number | null = null;
   longitud: number | null = null;
 
@@ -80,7 +80,7 @@ export class NuevoReportePage implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.fotoUrl = e.target.result;
+        this.fotoPreview = e.target.result;
       };
       reader.readAsDataURL(file);
     }

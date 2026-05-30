@@ -46,22 +46,43 @@ export class MisReportesPage implements OnInit {
   }
 
   async ngOnInit() {
+    await this.esperarUsuario();
     await this.cargarReportes();
+  }
+
+  esperarUsuario(): Promise<void> {
+    return new Promise((resolve) => {
+      const unsub = this.auth.onAuthStateChanged(user => {
+        unsub();
+        resolve();
+      });
+    });
   }
 
   async cargarReportes() {
     this.cargando = true;
     const user = this.auth.currentUser;
-    if (!user) return;
-    const q = query(
-      collection(this.firestore, 'reportes'),
-      where('uid', '==', user.uid),
-      orderBy('creadoEn', 'desc')
-    );
-    const snap = await getDocs(q);
-    this.reportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    this.filtrar(this.filtroActivo);
-    this.cargando = false;
+    if (!user) {
+      console.log('No hay usuario autenticado');
+      this.cargando = false;
+      return;
+    }
+    console.log('UID del usuario:', user.uid);
+    try {
+      const q = query(
+        collection(this.firestore, 'reportes'),
+        where('uid', '==', user.uid),
+        orderBy('creadoEn', 'desc')
+      );
+      const snap = await getDocs(q);
+      console.log('Reportes encontrados:', snap.size);
+      this.reportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      this.filtrar(this.filtroActivo);
+    } catch (error) {
+      console.error('Error cargando reportes:', error);
+    } finally {
+      this.cargando = false;
+    }
   }
 
   filtrar(valor: string) {
@@ -93,9 +114,12 @@ export class MisReportesPage implements OnInit {
     return map[estado] || estado;
   }
 
+  
   verDetalle(reporte: any) {
-    // próximamente
-  }
+  this.router.navigateByUrl('/detalle-reporte', {
+    state: { reporte }
+  });
+}
 
   goTo(path: string) {
     this.router.navigateByUrl(path);
