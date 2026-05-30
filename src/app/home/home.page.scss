@@ -160,3 +160,23 @@
     line-height: 1.6;
   }
 }
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  ion-icon {
+    font-size: 40px;
+    color: #1565C0;
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

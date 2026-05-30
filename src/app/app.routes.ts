@@ -42,4 +42,12 @@ export const routes: Routes = [
     path: 'perfil',
     loadComponent: () => import('./pages/perfil/perfil.page').then( m => m.PerfilPage)
   },
+  {
+    path: 'panel-funcionario',
+    loadComponent: () => import('./pages/panel-funcionario/panel-funcionario.page').then( m => m.PanelFuncionarioPage)
+  },
+  {
+    path: 'detalle-gestion',
+    loadComponent: () => import('./pages/detalle-gestion/detalle-gestion.page').then( m => m.DetalleGestionPage)
+  },
 ];

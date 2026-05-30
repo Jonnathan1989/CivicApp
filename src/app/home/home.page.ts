@@ -21,6 +21,7 @@ export class HomePage implements OnInit {
 
   nombreUsuario = '';
   inicial = '';
+  cargando = true;
 
   constructor(
     private auth: Auth,
@@ -36,12 +37,20 @@ export class HomePage implements OnInit {
       const snap = await getDoc(doc(this.firestore, 'usuarios', user.uid));
       if (snap.exists()) {
         const data = snap.data();
+
+        // Verificar rol y redirigir si es funcionario
+        if (data['rol'] === 'funcionario') {
+          this.router.navigateByUrl('/panel-funcionario', { replaceUrl: true });
+          return;
+        }
+
         this.nombreUsuario = data['nombre'] || 'Usuario';
       } else {
         this.nombreUsuario = user.displayName || user.email || 'Usuario';
       }
       this.inicial = this.nombreUsuario.charAt(0).toUpperCase();
     }
+    this.cargando = false;
   }
 
   goTo(path: string) {

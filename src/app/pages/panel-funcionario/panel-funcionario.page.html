@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="goToMapa()">
+        <ion-icon name="map-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Panel de Gestión</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="panel-content">
+
+  <!-- Métricas -->
+  <div class="metricas">
+    <div class="metrica-card blue">
+      <div class="metrica-num">{{ totalReportes }}</div>
+      <div class="metrica-label">Total</div>
+    </div>
+    <div class="metrica-card orange">
+      <div class="metrica-num">{{ enProceso }}</div>
+      <div class="metrica-label">En proceso</div>
+    </div>
+    <div class="metrica-card green">
+      <div class="metrica-num">{{ resueltosHoy }}</div>
+      <div class="metrica-label">Resueltos hoy</div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="filtro-chip"
+      *ngFor="let f of filtros"
+      [class.active]="filtroActivo === f.valor"
+      (click)="filtrar(f.valor)">
+      {{ f.label }}
+    </div>
+  </div>
+
+  <!-- Lista de reportes -->
+  <ion-list lines="none" *ngIf="reportesFiltrados.length > 0">
+    <ion-item *ngFor="let r of reportesFiltrados"
+      [button]="true" detail="false"
+      (click)="verDetalle(r)"
+      class="reporte-item">
+      <ion-avatar slot="start" class="categoria-icon" [ngClass]="r.categoria">
+        <ion-icon [name]="getIcono(r.categoria)"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <div class="card-top">
+          <span class="categoria-label">{{ r.categoria | titlecase }}</span>
+          <span class="estado-chip" [ngClass]="r.estado">{{ getEstadoLabel(r.estado) }}</span>
+        </div>
+        <p class="descripcion">{{ r.descripcion }}</p>
+        <p class="fecha">{{ r.creadoEn?.toDate() | date:'d MMM yyyy, h:mm a' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="reportesFiltrados.length === 0 && !cargando">
+    <ion-icon name="grid-outline"></ion-icon>
+    <p>No hay reportes {{ filtroActivo !== 'todos' ? 'con este estado' : '' }}</p>
+  </div>
+
+  <!-- Cargando -->
+  <div class="empty-state" *ngIf="cargando">
+    <ion-icon name="reload-outline" class="spin"></ion-icon>
+    <p>Cargando reportes...</p>
+  </div>
+
+</ion-content>
