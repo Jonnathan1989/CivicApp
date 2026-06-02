@@ -80,6 +80,11 @@ export class DetalleGestionPage implements OnInit {
     return map[estado] || 'medium';
   }
 
+  abrirMaps() {
+    const url = `https://www.google.com/maps?q=${this.reporte.latitud},${this.reporte.longitud}`;
+    window.open(url, '_blank');
+  }
+
   async cambiarEstado(nuevoEstado: string) {
     if (!this.reporte || this.reporte.estado === nuevoEstado) return;
 

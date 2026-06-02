@@ -56,7 +56,9 @@ export class PanelFuncionarioPage implements OnInit {
     });
   }
 
-  async ngOnInit() {
+  ngOnInit() {}
+
+  async ionViewWillEnter() {
     await this.cargarReportes();
   }
 
