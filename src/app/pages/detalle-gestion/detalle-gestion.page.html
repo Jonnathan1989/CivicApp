@@ -1,13 +1,67 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>detalle-gestion</ion-title>
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Gestionar Reporte</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">detalle-gestion</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <div *ngIf="!reporte" class="empty">
+    <p>No se encontró el reporte.</p>
+  </div>
+
+  <div *ngIf="reporte" class="detalle-container">
+
+    <div class="icono-categoria">
+      <ion-icon [name]="getIcono(reporte.categoria)"></ion-icon>
+    </div>
+
+    <h2 class="categoria">{{ reporte.categoria | titlecase }}</h2>
+
+    <ion-badge [color]="getEstadoColor(reporte.estado)">
+      {{ reporte.estado | titlecase }}
+    </ion-badge>
+
+    <div class="info-card">
+      <h4>Descripción</h4>
+      <p>{{ reporte.descripcion }}</p>
+    </div>
+
+    <div class="info-card">
+      <h4><ion-icon name="calendar-outline"></ion-icon> Fecha</h4>
+      <p>{{ reporte.creadoEn?.toDate() | date:'dd MMM yyyy, h:mm a' }}</p>
+    </div>
+
+    <div class="info-card">
+      <h4><ion-icon name="location-outline"></ion-icon> Ubicación</h4>
+      <p>Lat: {{ reporte.latitud | number:'1.4-4' }}</p>
+      <p>Lng: {{ reporte.longitud | number:'1.4-4' }}</p>
+    </div>
+
+    <div class="info-card">
+      <h4>Ciudadano</h4>
+      <p>{{ reporte.email }}</p>
+    </div>
+
+    <div class="estado-section">
+      <h4>Cambiar estado</h4>
+      <div class="estado-botones">
+        <button *ngFor="let e of estados"
+          class="estado-btn"
+          [class.activo]="reporte.estado === e.valor"
+          [attr.data-estado]="e.valor"
+          (click)="cambiarEstado(e.valor)">
+          <ion-icon [name]="e.icono"></ion-icon>
+          <span>{{ e.label }}</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
 </ion-content>
