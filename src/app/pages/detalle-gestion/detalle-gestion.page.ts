@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon, IonBadge,
-  ToastController, LoadingController
+  ToastController, LoadingController, AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -41,7 +41,8 @@ export class DetalleGestionPage implements OnInit {
     private router: Router,
     private firestore: Firestore,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {
     addIcons({
       arrowBackOutline, locationOutline, calendarOutline,
@@ -96,6 +97,34 @@ export class DetalleGestionPage implements OnInit {
       console.error('Error actualizando estado:', error);
       this.showToast('Error al actualizar el estado');
     }
+  }
+
+  async eliminarReporte() {
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar reporte',
+      message: '¿Estás seguro de que deseas eliminar este reporte? Esta acción no se puede deshacer.',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({ message: 'Eliminando...' });
+            await loading.present();
+            try {
+              await deleteDoc(doc(this.firestore, 'reportes', this.reporte.id));
+              await loading.dismiss();
+              this.showToast('Reporte eliminado');
+              this.router.navigateByUrl('/panel-funcionario');
+            } catch (e) {
+              await loading.dismiss();
+              this.showToast('Error al eliminar');
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async showToast(msg: string) {

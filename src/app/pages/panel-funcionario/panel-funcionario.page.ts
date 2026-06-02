@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, collection, query, orderBy, getDocs, where } from '@angular/fire/firestore';
+import { Firestore, collection, query, orderBy, getDocs } from '@angular/fire/firestore';
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton,
   IonIcon, IonList, IonItem, IonLabel, IonBadge, IonAvatar
@@ -41,6 +41,7 @@ export class PanelFuncionarioPage implements OnInit {
     { label: 'Todos', valor: 'todos' },
     { label: 'Recibidos', valor: 'recibido' },
     { label: 'En proceso', valor: 'en_proceso' },
+    { label: 'Resueltos', valor: 'resuelto' },
   ];
 
   constructor(
@@ -69,7 +70,6 @@ export class PanelFuncionarioPage implements OnInit {
       const snap = await getDocs(q);
       this.reportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Calcular métricas
       this.totalReportes = this.reportes.length;
       this.enProceso = this.reportes.filter(r => r.estado === 'en_proceso').length;
 
