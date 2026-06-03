@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, user } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, user } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -27,19 +28,38 @@ export class AuthService {
 
   async loginGoogle() {
     const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(this.auth, provider);
-    const ref = doc(this.firestore, 'usuarios', cred.user.uid);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-      await setDoc(ref, {
-        nombre: cred.user.displayName,
-        email: cred.user.email,
-        rol: 'ciudadano',
-        uid: cred.user.uid,
-        creadoEn: new Date()
-      });
+
+    if (Capacitor.isNativePlatform()) {
+      await signInWithRedirect(this.auth, provider);
+      const cred = await getRedirectResult(this.auth);
+      if (!cred) return;
+      const ref = doc(this.firestore, 'usuarios', cred.user.uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          nombre: cred.user.displayName,
+          email: cred.user.email,
+          rol: 'ciudadano',
+          uid: cred.user.uid,
+          creadoEn: new Date()
+        });
+      }
+      return cred;
+    } else {
+      const cred = await signInWithPopup(this.auth, provider);
+      const ref = doc(this.firestore, 'usuarios', cred.user.uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        await setDoc(ref, {
+          nombre: cred.user.displayName,
+          email: cred.user.email,
+          rol: 'ciudadano',
+          uid: cred.user.uid,
+          creadoEn: new Date()
+        });
+      }
+      return cred;
     }
-    return cred;
   }
 
   async logout() {

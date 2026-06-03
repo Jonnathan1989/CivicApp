@@ -49,8 +49,11 @@
       <p>{{ reporte.creadoEn?.toDate() | date:'dd MMM yyyy, h:mm a' }}</p>
     </div>
 
-    <div class="info-card">
-      <h4><ion-icon name="location-outline"></ion-icon> Ubicación</h4>
+    <div class="info-card maps-card" (click)="abrirMaps()">
+      <h4>
+        <ion-icon name="location-outline"></ion-icon> Ubicación
+        <small class="ver-maps">Ver en Maps 📍</small>
+      </h4>
       <p>Lat: {{ reporte.latitud | number:'1.4-4' }}</p>
       <p>Lng: {{ reporte.longitud | number:'1.4-4' }}</p>
     </div>

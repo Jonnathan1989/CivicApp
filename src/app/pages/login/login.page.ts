@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Capacitor } from '@capacitor/core';
 import { AuthService } from '../../services/auth';
 import {
   IonContent, IonItem, IonInput, IonButton, IonIcon, ToastController, LoadingController
@@ -13,12 +15,13 @@ import { locationSharp, mailOutline, lockClosedOutline, logoGoogle } from 'ionic
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonItem, IonInput, IonButton, IonIcon, FormsModule],
+  imports: [IonContent, IonItem, IonInput, IonButton, IonIcon, FormsModule, CommonModule],
 })
 export class LoginPage {
 
   email = '';
   password = '';
+  esNativo = Capacitor.isNativePlatform();
 
   constructor(
     private authService: AuthService,

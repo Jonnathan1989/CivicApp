@@ -80,6 +80,11 @@ export class DetalleReportePage implements OnInit {
     return map[estado] || estado;
   }
 
+  abrirMaps() {
+    const url = `https://www.google.com/maps?q=${this.reporte.latitud},${this.reporte.longitud}`;
+    window.open(url, '_blank');
+  }
+
   goBack() {
     this.router.navigateByUrl('/mis-reportes');
   }

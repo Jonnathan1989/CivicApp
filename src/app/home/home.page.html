@@ -1,7 +1,6 @@
-<!DOCTYPE html>
+<!doctype html>
 <ion-content class="home-content">
   <div class="home-container" *ngIf="!cargando">
-
     <div class="top-bar">
       <div class="user-info">
         <div class="avatar">{{ inicial }}</div>
@@ -53,16 +52,18 @@
     </div>
 
     <h4 class="section-title">Actividad reciente</h4>
-    <div class="empty-state">
+    <div
+      class="empty-state"
+      (click)="goTo('/nuevo-reporte')"
+      style="cursor: pointer"
+    >
       <ion-icon name="document-outline"></ion-icon>
-      <p>Aún no tienes reportes.<br>¡Crea tu primer reporte!</p>
+      <p>Aún no tienes reportes.<br />¡Crea tu primer reporte!</p>
     </div>
-
   </div>
 
   <!-- Pantalla de carga mientras verifica el rol -->
   <div class="loading-state" *ngIf="cargando">
     <ion-icon name="reload-outline" class="spin"></ion-icon>
   </div>
-
 </ion-content>

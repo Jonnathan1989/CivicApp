@@ -34,11 +34,11 @@
         Iniciar sesión
       </ion-button>
 
-      <div class="divider">
+      <div class="divider" *ngIf="!esNativo">
         <span>o</span>
       </div>
 
-      <ion-button expand="block" class="btn-google" (click)="loginGoogle()">
+      <ion-button *ngIf="!esNativo" expand="block" class="btn-google" (click)="loginGoogle()">
         <ion-icon name="logo-google" slot="start"></ion-icon>
         Continuar con Google
       </ion-button>

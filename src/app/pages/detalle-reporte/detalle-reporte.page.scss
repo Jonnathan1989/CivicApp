@@ -89,3 +89,18 @@
   padding: 40px;
   color: #888;
 }
+
+.maps-card {
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover, &:active {
+    background: #f0f4ff;
+  }
+}
+
+.ver-maps {
+  color: #3880ff;
+  margin-left: 8px;
+  font-size: 12px;
+}
