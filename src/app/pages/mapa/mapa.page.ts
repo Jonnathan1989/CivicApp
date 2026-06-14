@@ -24,6 +24,26 @@ import * as L from 'leaflet';
 export class MapaPage implements OnInit, AfterViewInit {
 
   private map!: L.Map;
+  private todosLosMarcadores: { marker: L.Marker, data: any }[] = [];
+
+  filtroCategoria = 'todos';
+  filtroEstado = 'todos';
+
+  categorias = [
+    { label: 'Todos', valor: 'todos' },
+    { label: 'Baches', valor: 'baches' },
+    { label: 'Luminarias', valor: 'luminarias' },
+    { label: 'Basuras', valor: 'basuras' },
+    { label: 'Parques', valor: 'parques' },
+    { label: 'Otros', valor: 'otros' },
+  ];
+
+  estados = [
+    { label: 'Todos', valor: 'todos' },
+    { label: 'Recibido', valor: 'recibido' },
+    { label: 'En proceso', valor: 'en_proceso' },
+    { label: 'Resuelto', valor: 'resuelto' },
+  ];
 
   constructor(
     private auth: Auth,
@@ -57,15 +77,13 @@ export class MapaPage implements OnInit, AfterViewInit {
 
   initMap() {
     const mapEl = document.getElementById('map');
-    if (!mapEl) {
-      console.error('Elemento #map no encontrado');
-      return;
-    }
+    if (!mapEl) return;
 
-    // Calcular altura disponible restando el header
     const headerEl = document.querySelector('ion-header');
+    const filtersEl = document.getElementById('filtros-container');
     const headerHeight = headerEl ? headerEl.clientHeight : 56;
-    const availableHeight = window.innerHeight - headerHeight;
+    const filtersHeight = filtersEl ? filtersEl.clientHeight : 90;
+    const availableHeight = window.innerHeight - headerHeight - filtersHeight;
     mapEl.style.width = '100%';
     mapEl.style.height = availableHeight + 'px';
 
@@ -101,11 +119,43 @@ export class MapaPage implements OnInit, AfterViewInit {
             <small>Estado: ${data['estado']}</small>
           `);
           marker.addTo(this.map);
+          this.todosLosMarcadores.push({ marker, data });
         }
       });
     } catch (error) {
       console.error('Error cargando marcadores:', error);
     }
+  }
+
+  aplicarFiltros() {
+    this.todosLosMarcadores.forEach(({ marker, data }) => {
+      const coincideCategoria = this.filtroCategoria === 'todos' || data['categoria'] === this.filtroCategoria;
+      const coincideEstado = this.filtroEstado === 'todos' || data['estado'] === this.filtroEstado;
+
+      if (coincideCategoria && coincideEstado) {
+        if (!this.map.hasLayer(marker)) {
+          marker.addTo(this.map);
+        }
+      } else {
+        if (this.map.hasLayer(marker)) {
+          this.map.removeLayer(marker);
+        }
+      }
+    });
+  }
+
+  setFiltroCategoria(valor: string) {
+    this.zone.run(() => {
+      this.filtroCategoria = valor;
+      this.aplicarFiltros();
+    });
+  }
+
+  setFiltroEstado(valor: string) {
+    this.zone.run(() => {
+      this.filtroEstado = valor;
+      this.aplicarFiltros();
+    });
   }
 
   goBack() {

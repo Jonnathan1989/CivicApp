@@ -9,4 +9,29 @@
   </ion-toolbar>
 </ion-header>
 
+<div id="filtros-container">
+  <div class="filtros-row">
+    <span class="filtro-label">Categoría:</span>
+    <div class="chips">
+      <div *ngFor="let c of categorias"
+        class="chip"
+        [class.active]="filtroCategoria === c.valor"
+        (click)="setFiltroCategoria(c.valor)">
+        {{ c.label }}
+      </div>
+    </div>
+  </div>
+  <div class="filtros-row">
+    <span class="filtro-label">Estado:</span>
+    <div class="chips">
+      <div *ngFor="let e of estados"
+        class="chip"
+        [class.active]="filtroEstado === e.valor"
+        (click)="setFiltroEstado(e.valor)">
+        {{ e.label }}
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="map"></div>

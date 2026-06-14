@@ -111,3 +111,25 @@
     margin: 0;
   }
 }
+
+.info-content {
+  flex: 1;
+}
+
+.info-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .edit-input {
+    flex: 1;
+    border-bottom: 1px solid #3880ff;
+    font-size: 15px;
+  }
+}

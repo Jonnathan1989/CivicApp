@@ -48,13 +48,33 @@
 
     <div class="info-section">
       <h4 class="section-title">Información</h4>
+
       <div class="info-card">
         <ion-icon name="person-outline"></ion-icon>
-        <div>
+        <div class="info-content">
           <p class="info-label">Nombre</p>
-          <p class="info-value">{{ nombre }}</p>
+          <div *ngIf="!editandoNombre" class="info-value-row">
+            <p class="info-value">{{ nombre }}</p>
+            <ion-button fill="clear" size="small" (click)="iniciarEdicion()">
+              <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <div *ngIf="editandoNombre" class="edit-row">
+            <ion-input
+              [(ngModel)]="nombreEditado"
+              placeholder="Ingresa tu nombre"
+              class="edit-input">
+            </ion-input>
+            <ion-button fill="clear" size="small" color="success" (click)="guardarNombre()">
+              <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="small" color="danger" (click)="cancelarEdicion()">
+              <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
         </div>
       </div>
+
       <div class="info-card">
         <ion-icon name="mail-outline"></ion-icon>
         <div>
@@ -62,6 +82,7 @@
           <p class="info-value">{{ email }}</p>
         </div>
       </div>
+
     </div>
 
   </div>
